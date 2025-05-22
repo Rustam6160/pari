@@ -1,0 +1,29 @@
+<h1>🌟 Мои добрые дела</h1>
+
+{% if user.is_authenticated %}
+    <p>Привет, {{ user.username }} | <a href="{% url 'logout' %}">Выйти</a></p>
+    <p><a href="{% url 'add_deed' %}">➕ Добавить дело</a></p>
+{% else %}
+    <p><a href="{% url 'login' %}">Войти</a> или <a href="{% url 'register' %}">Зарегистрироваться</a></p>
+{% endif %}
+
+<form method="get" action="">
+    <input type="text" name="q" placeholder="Поиск..." value="{{ query|default:'' }}">
+    <button type="submit">🔍</button>
+</form>
+
+<ul>
+  {% for deed in deeds %}
+    <li>
+      <strong>{{ deed.title }}</strong> <br>
+      {{ deed.description }} <br>
+      <small>{{ deed.created_at }}</small><br>
+      {% if user.is_authenticated %}
+        <a href="{% url 'edit_deed' deed.pk %}">✏️</a>
+        <a href="{% url 'delete_deed' deed.pk %}">🗑️</a>
+      {% endif %}
+    </li>
+  {% empty %}
+    <li>Добрых дел пока нет 😢</li>
+  {% endfor %}
+</ul>
